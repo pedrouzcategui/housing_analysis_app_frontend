@@ -1,4 +1,5 @@
 import type { FiltersState } from "./FiltersPanel";
+import { Link } from "react-router-dom";
 import { Skeleton } from "./Skeleton";
 
 type ZillowHeaderProps = {
@@ -41,6 +42,9 @@ export function ZillowHeader({
         </div>
 
         <nav className="zNav zNav--right" aria-label="Account">
+          <Link className="zNav__link" to="/admin">
+            Admin
+          </Link>
           <a className="zNav__link" href="#">
             Manage rentals
           </a>

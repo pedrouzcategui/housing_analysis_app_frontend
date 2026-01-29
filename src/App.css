@@ -14,10 +14,11 @@
 
 .zApp {
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   background: var(--z-bg);
   display: grid;
   grid-template-rows: auto 1fr;
+  overflow: hidden;
 }
 
 .zHeader {
@@ -159,28 +160,35 @@
 
 .zContent {
   min-height: 0;
+  overflow: hidden;
+  height: 100%;
 }
 
 .zSplit {
   height: 100%;
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .zMapPane {
   min-width: 0;
+  min-height: 0;
   border-right: 1px solid var(--z-border);
   background: #eaf2ff;
 }
 
 .zResultsPane {
   min-width: 0;
+  min-height: 0;
   background: var(--z-surface);
 }
 
 /* Map */
 .zMap {
   height: 100%;
+  min-height: 0;
 }
 
 .zMap__wrap {
@@ -219,6 +227,7 @@
   height: 100%;
   display: grid;
   grid-template-rows: auto 1fr;
+  min-height: 0;
 }
 
 .zResults__header {
@@ -254,8 +263,10 @@
 }
 
 .zResults__scroll {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 14px;
+  min-height: 0;
 }
 
 .zGrid {
@@ -272,6 +283,7 @@
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
   text-align: left;
   cursor: pointer;
+  min-height: 200px;
   padding: 0;
 }
 
@@ -352,6 +364,296 @@
 .zEmpty {
   padding: 10px;
   color: var(--z-muted);
+}
+
+/* Admin */
+.zNav__pill {
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--z-border);
+  background: rgba(0, 106, 255, 0.08);
+  color: var(--z-blue);
+  font-weight: 900;
+  font-size: 0.86rem;
+}
+
+.zSecondaryBtn {
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--z-border-strong);
+  background: #fff;
+  color: var(--z-text);
+  font-weight: 800;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.zSecondaryBtn:hover {
+  border-color: rgba(0, 106, 255, 0.55);
+  box-shadow: 0 0 0 4px rgba(0, 106, 255, 0.12);
+}
+
+.zAdmin {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+}
+
+.zAdmin__left {
+  min-width: 0;
+  min-height: 0;
+  border-right: 1px solid var(--z-border);
+  padding: 14px;
+  display: grid;
+  grid-template-rows: 1fr 240px;
+  overflow: hidden;
+  gap: 14px;
+}
+
+.zAdmin__right {
+  min-width: 0;
+  min-height: 0;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.zAdminPanel {
+  background: var(--z-surface);
+  border: 1px solid var(--z-border);
+  border-radius: 14px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.zAdminPanel__header {
+  padding: 14px 14px 12px;
+  border-bottom: 1px solid var(--z-border);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.zAdminPanel__title {
+  font-weight: 900;
+  color: var(--z-text);
+  font-size: 1.05rem;
+}
+
+.zAdminPanel__subtitle {
+  margin-top: 4px;
+  color: var(--z-muted);
+  font-size: 0.9rem;
+}
+
+.zMetaRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.zMetaText {
+  color: var(--z-muted);
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.zBadge {
+  height: 26px;
+  border-radius: 999px;
+  padding: 0 10px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 900;
+  font-size: 0.82rem;
+  border: 1px solid var(--z-border);
+  background: rgba(31, 41, 55, 0.05);
+  color: rgba(31, 41, 55, 0.85);
+}
+
+.zBadge--queued {
+  background: rgba(31, 41, 55, 0.06);
+}
+
+.zBadge--running {
+  background: rgba(0, 106, 255, 0.1);
+  border-color: rgba(0, 106, 255, 0.25);
+  color: var(--z-blue);
+}
+
+.zBadge--success {
+  background: rgba(22, 163, 74, 0.12);
+  border-color: rgba(22, 163, 74, 0.28);
+  color: rgba(22, 163, 74, 0.98);
+}
+
+.zBadge--failed {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: rgba(220, 38, 38, 0.28);
+  color: rgba(220, 38, 38, 0.98);
+}
+
+.zAdminPreview {
+  min-height: 0;
+  padding: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f0f6ff, #ffffff);
+}
+
+.zAdminPreview__inner {
+  height: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--z-border);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--z-shadow);
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: hidden;
+}
+
+.zAdminPreview__img {
+  width: 100%;
+  max-height: 400px;
+  display: block;
+  object-fit: contain;
+  background: #eef2ff;
+}
+
+.zAdminPreview__hint {
+  display: grid;
+  place-items: center;
+  color: rgba(31, 41, 55, 0.6);
+  font-weight: 900;
+  letter-spacing: -0.2px;
+}
+
+.zAdminPreview__meta {
+  padding: 12px;
+  border-top: 1px solid var(--z-border);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.zAdminPreview__url {
+  font-weight: 900;
+  color: var(--z-text);
+  font-size: 0.93rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.zAdminPreview__small {
+  margin-top: 4px;
+  color: var(--z-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.zAdminPanel--logs .zAdminLogs {
+  background: #0b1220;
+}
+
+.zAdminLogs {
+  min-height: 0;
+  overflow: auto;
+  padding: 12px;
+}
+
+.zAdminLogs__pre {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.zAdminSideHeader {
+  background: var(--z-surface);
+  border: 1px solid var(--z-border);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.zAdminSideHeader__title {
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: var(--z-text);
+}
+
+.zAdminSideHeader__subtitle {
+  margin-top: 4px;
+  color: var(--z-muted);
+  font-size: 0.88rem;
+}
+
+.zAdminSideScroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+  display: grid;
+  gap: 12px;
+}
+
+.zProcCard {
+  padding: 0;
+}
+
+.zProcCard__body {
+  padding: 12px;
+}
+
+.zProcCard__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.zProcCard__title {
+  font-weight: 900;
+  color: var(--z-text);
+  font-size: 0.96rem;
+  line-height: 1.2;
+}
+
+.zProcCard__meta {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1100px) {
+  .zAdmin {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 300px;
+  }
+
+  .zAdmin__left {
+    border-right: none;
+    border-bottom: 1px solid var(--z-border);
+  }
 }
 
 /* Skeleton */

@@ -1,0 +1,198 @@
+export type AdminProcessStatus = "queued" | "running" | "success" | "failed";
+
+export type AdminProcess = {
+  id: string;
+  title: string;
+  status: AdminProcessStatus;
+  startedAt: string; // ISO
+  currentStep: string;
+  url: string;
+  screenshotHint: string;
+  screenshotUrl?: string;
+  screenshotDataUrl?: string;
+  scrapedCount: number;
+  logs: string[];
+};
+
+export const adminProcesses: AdminProcess[] = [
+  {
+    id: "proc_001",
+    title: "Zillow scrape · Caracas · Apartments",
+    status: "running",
+    startedAt: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
+    currentStep: "Parsing results list (page 3/12)",
+    url: "https://example.com/search?city=caracas&type=apartment",
+    screenshotHint: "Results list with highlighted card",
+    screenshotUrl: "/admin-screenshot-sample.svg",
+    scrapedCount: 96,
+    logs: [
+      "[09:41:12.101] Launching Chromium (headless)…",
+      "[09:41:13.884] Navigating to search URL…",
+      "[09:41:15.022] Waiting for results container…",
+      "[09:41:16.407] Found 42 cards on page 1",
+      "[09:41:18.944] Extracted: price, beds, baths, area",
+      "[09:41:25.110] Next page → 2",
+      "[09:41:31.620] Next page → 3",
+      "[09:41:35.993] Throttling: 750ms between card visits",
+      "[09:41:44.221] Current step: Parsing results list (page 3/12)",
+    ],
+  },
+  {
+    id: "proc_002",
+    title: "Photos sync · Valencia",
+    status: "queued",
+    startedAt: new Date(Date.now() - 1000 * 60 * 2).toISOString(),
+    currentStep: "Waiting for available browser worker",
+    url: "https://example.com/photos/sync?city=valencia",
+    screenshotHint: "Queued",
+    scrapedCount: 0,
+    logs: [
+      "[09:47:03.014] Job created",
+      "[09:47:03.018] Waiting for worker slot…",
+    ],
+  },
+  {
+    id: "proc_003",
+    title: "Broker directory · Maracaibo",
+    status: "success",
+    startedAt: new Date(Date.now() - 1000 * 60 * 34).toISOString(),
+    currentStep: "Completed",
+    url: "https://example.com/brokers?city=maracaibo",
+    screenshotHint: "Directory table",
+    screenshotUrl: "/admin-screenshot-sample.svg",
+    scrapedCount: 24,
+    logs: [
+      "[09:16:00.932] Launching Chromium (headless)…",
+      "[09:16:04.222] Navigating to directory…",
+      "[09:16:06.041] Extracted 24 brokers",
+      "[09:16:08.118] Uploading results…",
+      "[09:16:08.921] Done ✅",
+    ],
+  },
+  {
+    id: "proc_004",
+    title: "Nightly healthcheck",
+    status: "failed",
+    startedAt: new Date(Date.now() - 1000 * 60 * 85).toISOString(),
+    currentStep: "Failed: timeout waiting for selector",
+    url: "https://example.com/healthcheck",
+    screenshotHint: "Error screen",
+    screenshotUrl: "/admin-screenshot-sample.svg",
+    scrapedCount: 0,
+    logs: [
+      "[08:23:17.003] Starting healthcheck scenario…",
+      "[08:23:19.455] Step: Login",
+      "[08:23:31.890] Step: Navigate to dashboard",
+      "[08:23:52.477] ERROR: Timeout waiting for '[data-testid=dashboard]'",
+      "[08:23:52.481] Captured screenshot: error_2026-01-28.png",
+    ],
+  },
+  {
+    id: "proc_005",
+    title: "Price audit · Barquisimeto",
+    status: "running",
+    startedAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+    currentStep: "Visiting listing details (12/40)",
+    url: "https://example.com/audit?city=barquisimeto",
+    screenshotHint: "Listing details with price section",
+    screenshotUrl: "/admin-screenshot-sample.svg",
+    scrapedCount: 12,
+    logs: [
+      "[09:34:10.002] Launching Chromium (headless)…",
+      "[09:34:12.443] Opening audit search…",
+      "[09:34:18.309] Collected 40 candidate URLs",
+      "[09:34:27.001] Visiting listing details (12/40)",
+      "[09:34:28.222] Parsed: price, lastSold, est. payment",
+    ],
+  },
+  {
+    id: "proc_001",
+    title: "Zillow scrape · Caracas · Apartments",
+    status: "running",
+    startedAt: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
+    currentStep: "Parsing results list (page 3/12)",
+    url: "https://example.com/search?city=caracas&type=apartment",
+    screenshotHint: "Results list with highlighted card",
+    screenshotUrl: "/admin-screenshot-sample.svg",
+    scrapedCount: 96,
+    logs: [
+      "[09:41:12.101] Launching Chromium (headless)…",
+      "[09:41:13.884] Navigating to search URL…",
+      "[09:41:15.022] Waiting for results container…",
+      "[09:41:16.407] Found 42 cards on page 1",
+      "[09:41:18.944] Extracted: price, beds, baths, area",
+      "[09:41:25.110] Next page → 2",
+      "[09:41:31.620] Next page → 3",
+      "[09:41:35.993] Throttling: 750ms between card visits",
+      "[09:41:44.221] Current step: Parsing results list (page 3/12)",
+    ],
+  },
+  {
+    id: "proc_002",
+    title: "Photos sync · Valencia",
+    status: "queued",
+    startedAt: new Date(Date.now() - 1000 * 60 * 2).toISOString(),
+    currentStep: "Waiting for available browser worker",
+    url: "https://example.com/photos/sync?city=valencia",
+    screenshotHint: "Queued",
+    scrapedCount: 0,
+    logs: [
+      "[09:47:03.014] Job created",
+      "[09:47:03.018] Waiting for worker slot…",
+    ],
+  },
+  {
+    id: "proc_003",
+    title: "Broker directory · Maracaibo",
+    status: "success",
+    startedAt: new Date(Date.now() - 1000 * 60 * 34).toISOString(),
+    currentStep: "Completed",
+    url: "https://example.com/brokers?city=maracaibo",
+    screenshotHint: "Directory table",
+    screenshotUrl: "/admin-screenshot-sample.svg",
+    scrapedCount: 24,
+    logs: [
+      "[09:16:00.932] Launching Chromium (headless)…",
+      "[09:16:04.222] Navigating to directory…",
+      "[09:16:06.041] Extracted 24 brokers",
+      "[09:16:08.118] Uploading results…",
+      "[09:16:08.921] Done ✅",
+    ],
+  },
+  {
+    id: "proc_004",
+    title: "Nightly healthcheck",
+    status: "failed",
+    startedAt: new Date(Date.now() - 1000 * 60 * 85).toISOString(),
+    currentStep: "Failed: timeout waiting for selector",
+    url: "https://example.com/healthcheck",
+    screenshotHint: "Error screen",
+    screenshotUrl: "/admin-screenshot-sample.svg",
+    scrapedCount: 0,
+    logs: [
+      "[08:23:17.003] Starting healthcheck scenario…",
+      "[08:23:19.455] Step: Login",
+      "[08:23:31.890] Step: Navigate to dashboard",
+      "[08:23:52.477] ERROR: Timeout waiting for '[data-testid=dashboard]'",
+      "[08:23:52.481] Captured screenshot: error_2026-01-28.png",
+    ],
+  },
+  {
+    id: "proc_005",
+    title: "Price audit · Barquisimeto",
+    status: "running",
+    startedAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+    currentStep: "Visiting listing details (12/40)",
+    url: "https://example.com/audit?city=barquisimeto",
+    screenshotHint: "Listing details with price section",
+    screenshotUrl: "/admin-screenshot-sample.svg",
+    scrapedCount: 12,
+    logs: [
+      "[09:34:10.002] Launching Chromium (headless)…",
+      "[09:34:12.443] Opening audit search…",
+      "[09:34:18.309] Collected 40 candidate URLs",
+      "[09:34:27.001] Visiting listing details (12/40)",
+      "[09:34:28.222] Parsed: price, lastSold, est. payment",
+    ],
+  },
+];
