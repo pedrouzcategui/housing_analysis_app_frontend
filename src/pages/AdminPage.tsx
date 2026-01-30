@@ -2,6 +2,13 @@ import "../App.css";
 
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  Badge,
+  Button,
+  CardButton,
+  Panel,
+  PanelHeader,
+} from "../components/ui";
 import { adminProcesses, type AdminProcess } from "../data/adminProcesses";
 
 function formatWhen(iso: string): string {
@@ -150,26 +157,23 @@ export function AdminPage() {
       <main className="zContent">
         <div className="zAdmin">
           <section className="zAdmin__left" aria-label="Process details">
-            <div className="zAdminPanel">
-              <div className="zAdminPanel__header">
-                <div>
-                  <div className="zAdminPanel__title">Headless Browser</div>
-                  <div className="zAdminPanel__subtitle">
-                    {selected ? selected.currentStep : "Select a process"}
-                  </div>
-                </div>
-
-                {selected ? (
-                  <div className="zMetaRow" aria-label="Process meta">
-                    <span className={`zBadge zBadge--${selected.status}`}>
-                      {statusLabel(selected.status)}
-                    </span>
-                    <span className="zMetaText">
-                      Started {formatWhen(selected.startedAt)}
-                    </span>
-                  </div>
-                ) : null}
-              </div>
+            <Panel>
+              <PanelHeader
+                title="Headless Browser"
+                subtitle={selected ? selected.currentStep : "Select a process"}
+                actions={
+                  selected ? (
+                    <>
+                      <Badge variant={selected.status}>
+                        {statusLabel(selected.status)}
+                      </Badge>
+                      <span className="zMetaText">
+                        Started {formatWhen(selected.startedAt)}
+                      </span>
+                    </>
+                  ) : null
+                }
+              />
 
               <div
                 className="zAdminPreview"
@@ -208,21 +212,16 @@ export function AdminPage() {
                   </div>
                 )}
               </div>
-            </div>
+            </Panel>
 
-            <div className="zAdminPanel zAdminPanel--logs">
-              <div className="zAdminPanel__header">
-                <div>
-                  <div className="zAdminPanel__title">Logs</div>
-                  <div className="zAdminPanel__subtitle">
-                    {selected ? `Live output for ${selected.id}` : ""}
-                  </div>
-                </div>
-
-                <div className="zMetaRow">
-                  <button
-                    className="zSecondaryBtn"
+            <Panel variant="logs">
+              <PanelHeader
+                title="Logs"
+                subtitle={selected ? `Live output for ${selected.id}` : ""}
+                actions={
+                  <Button
                     type="button"
+                    variant="secondary"
                     onClick={() => {
                       if (!selected) return;
                       downloadText(
@@ -232,9 +231,9 @@ export function AdminPage() {
                     }}
                   >
                     Download
-                  </button>
-                </div>
-              </div>
+                  </Button>
+                }
+              />
 
               <div className="zAdminLogs" aria-label="Logs">
                 {selected ? (
@@ -243,7 +242,7 @@ export function AdminPage() {
                   </pre>
                 ) : null}
               </div>
-            </div>
+            </Panel>
           </section>
 
           <aside className="zAdmin__right" aria-label="Processes">
@@ -254,28 +253,29 @@ export function AdminPage() {
                   Click a card to inspect state, preview, and logs
                 </div>
               </div>
-              <button className="zSecondaryBtn" type="button">
+              <Button variant="secondary" type="button">
                 New
-              </button>
+              </Button>
             </div>
 
             <div className="zAdminSideScroll">
               {processes.map((p) => {
                 const isSelected = p.id === selectedId;
                 return (
-                  <button
+                  <CardButton
                     key={p.id}
                     type="button"
-                    className={`zCard zProcCard ${isSelected ? "zCard--selected" : ""}`}
+                    className="zProcCard"
+                    selected={isSelected}
                     onClick={() => setSelectedId(p.id)}
                     aria-pressed={isSelected}
                   >
                     <div className="zProcCard__body">
                       <div className="zProcCard__top">
                         <div className="zProcCard__title">{p.title}</div>
-                        <span className={`zBadge zBadge--${p.status}`}>
+                        <Badge variant={p.status}>
                           {statusLabel(p.status)}
-                        </span>
+                        </Badge>
                       </div>
                       <div className="zProcCard__meta">
                         <span className="zMetaText">{p.currentStep}</span>
@@ -290,7 +290,7 @@ export function AdminPage() {
                         </span>
                       </div>
                     </div>
-                  </button>
+                  </CardButton>
                 );
               })}
             </div>
