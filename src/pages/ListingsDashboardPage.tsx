@@ -1,6 +1,7 @@
 import "../App.css";
 
 import { useEffect, useMemo, useState } from "react";
+import { ListingDetailsPanel } from "../components/ListingDetailsPanel";
 import { ListingsPanel } from "../components/ListingsPanel";
 import { VenezuelaMap } from "../components/VenezuelaMap";
 import { ZillowHeader } from "../components/ZillowHeader";
@@ -11,6 +12,7 @@ import { type FiltersState } from "../components/FiltersPanel";
 export function ListingsDashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [detailsId, setDetailsId] = useState<string | null>(null);
   const [filters, setFilters] = useState<FiltersState>({
     query: "",
     city: "All",
@@ -62,6 +64,26 @@ export function ListingsDashboardPage() {
     return filtered[0]?.id ?? null;
   }, [filtered, isLoading, selectedId]);
 
+  const effectiveDetailsId = useMemo(() => {
+    if (isLoading) return null;
+    if (detailsId && filtered.some((l) => l.id === detailsId)) return detailsId;
+    return null;
+  }, [detailsId, filtered, isLoading]);
+
+  const detailsListing = useMemo(() => {
+    if (!effectiveDetailsId) return null;
+    return filtered.find((l) => l.id === effectiveDetailsId) ?? null;
+  }, [effectiveDetailsId, filtered]);
+
+  const handleSelect = (id: string) => {
+    setSelectedId(id);
+    setDetailsId(id);
+  };
+
+  const handleCloseDetails = () => {
+    setDetailsId(null);
+  };
+
   return (
     <div className="zApp">
       <ZillowHeader
@@ -78,7 +100,7 @@ export function ListingsDashboardPage() {
               isLoading={isLoading}
               listings={filtered}
               selectedId={effectiveSelectedId}
-              onSelect={setSelectedId}
+              onSelect={handleSelect}
             />
           </div>
 
@@ -87,7 +109,18 @@ export function ListingsDashboardPage() {
               isLoading={isLoading}
               listings={filtered}
               selectedId={effectiveSelectedId}
-              onSelect={setSelectedId}
+              onSelect={handleSelect}
+            />
+          </div>
+
+          <div
+            className={`zDetailsPane ${effectiveDetailsId ? "zDetailsPane--open" : ""}`}
+          >
+            <ListingDetailsPanel
+              isLoading={isLoading}
+              listing={detailsListing}
+              isOpen={Boolean(effectiveDetailsId)}
+              onClose={handleCloseDetails}
             />
           </div>
         </div>

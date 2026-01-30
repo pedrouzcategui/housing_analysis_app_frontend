@@ -8,6 +8,11 @@
   --z-muted: rgba(31, 41, 55, 0.65);
   --z-blue: #006aff;
   --z-blue-600: #0057d6;
+  --z-green: #16a34a;
+  --z-teal: #0f766e;
+  --z-purple: #7c3aed;
+  --z-amber: #f59e0b;
+  --z-brown: #92400e;
   --z-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   --z-radius: 12px;
 }
@@ -167,7 +172,7 @@
 .zSplit {
   height: 100%;
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
+  grid-template-columns: 1.2fr 0.8fr 420px;
   min-height: 0;
   overflow: hidden;
 }
@@ -185,10 +190,394 @@
   background: var(--z-surface);
 }
 
+.zDetailsPane {
+  min-width: 0;
+  min-height: 0;
+  background: var(--z-surface);
+  border-left: 1px solid var(--z-border);
+}
+
 /* Map */
 .zMap {
   height: 100%;
   min-height: 0;
+}
+
+/* Dynamic listing pins */
+.zPinIcon {
+  background: transparent;
+  border: none;
+}
+
+.zPin {
+  --pin-color: var(--z-blue);
+  --pin-ring: #ffffff;
+  width: 36px;
+  height: 46px;
+  position: relative;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.2));
+}
+
+.zPin--sale {
+  --pin-color: var(--z-blue);
+}
+
+.zPin--rent {
+  --pin-color: var(--z-green);
+}
+
+.zPin--apartment {
+  --pin-ring: rgba(124, 58, 237, 0.95);
+}
+
+.zPin--house {
+  --pin-ring: rgba(245, 158, 11, 0.95);
+}
+
+.zPin--terrain {
+  --pin-ring: rgba(146, 64, 14, 0.95);
+}
+
+.zPin--business {
+  --pin-ring: rgba(15, 118, 110, 0.95);
+}
+
+.zPin__bubble {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--pin-color);
+  border: 2px solid var(--pin-ring);
+  display: grid;
+  place-items: center;
+}
+
+.zPin__glyph {
+  color: #fff;
+  font-weight: 1000;
+  font-size: 0.92rem;
+  letter-spacing: -0.4px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.18);
+}
+
+.zPin__tag {
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  color: rgba(31, 41, 55, 0.9);
+  display: grid;
+  place-items: center;
+  font-weight: 1000;
+  font-size: 0.65rem;
+}
+
+.zPin__stem {
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  width: 14px;
+  height: 14px;
+  transform: translateX(-50%) rotate(45deg);
+  border-radius: 4px;
+  background: var(--pin-color);
+  border-right: 2px solid var(--pin-ring);
+  border-bottom: 2px solid var(--pin-ring);
+}
+
+.zPin.isSelected {
+  transform: scale(1.08);
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.28));
+}
+
+/* Hover tooltip card */
+.leaflet-tooltip.zPinTooltip {
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.leaflet-tooltip.zPinTooltip::before {
+  display: none;
+}
+
+.zHoverCard {
+  width: 260px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid var(--z-border);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+  display: grid;
+  grid-template-columns: 92px 1fr;
+}
+
+.zHoverCard__imgWrap {
+  background: #eef2f7;
+}
+
+.zHoverCard__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.zHoverCard__imgPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #eef2f7, #e6edf7);
+}
+
+.zHoverCard__body {
+  padding: 10px 10px 10px 10px;
+  min-width: 0;
+}
+
+.zHoverCard__price {
+  font-weight: 1000;
+  color: var(--z-text);
+  line-height: 1.1;
+}
+
+.zHoverCard__op {
+  margin-left: 6px;
+  color: rgba(31, 41, 55, 0.65);
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.zHoverCard__title {
+  margin-top: 6px;
+  font-weight: 850;
+  color: rgba(31, 41, 55, 0.92);
+  font-size: 0.92rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.zHoverCard__meta {
+  margin-top: 4px;
+  color: rgba(31, 41, 55, 0.62);
+  font-size: 0.86rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Details panel */
+.zDetails {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.zDetails__header {
+  padding: 16px;
+  border-bottom: 1px solid var(--z-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.zDetails__headerTitle {
+  font-weight: 1000;
+  color: var(--z-text);
+}
+
+.zDetails__close {
+  height: 34px;
+  width: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--z-border);
+  background: rgba(31, 41, 55, 0.04);
+  color: rgba(31, 41, 55, 0.85);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.zDetails__close:hover {
+  background: rgba(31, 41, 55, 0.07);
+}
+
+.zDetails__scroll {
+  overflow: auto;
+  min-height: 0;
+}
+
+.zDetails__empty {
+  padding: 16px;
+  color: var(--z-muted);
+  font-weight: 700;
+}
+
+.zDetails__loading {
+  padding: 16px;
+}
+
+.zDetails__content {
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+}
+
+.zDetails__imgWrap {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--z-border);
+  background: #eef2f7;
+}
+
+.zDetails__img {
+  width: 100%;
+  height: 240px;
+  display: block;
+  object-fit: cover;
+}
+
+.zDetails__imgPlaceholder {
+  height: 240px;
+  background: linear-gradient(135deg, #eef2f7, #e6edf7);
+}
+
+.zDetails__badges {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.zBadge--sale {
+  background: rgba(0, 106, 255, 0.1);
+  border-color: rgba(0, 106, 255, 0.25);
+  color: var(--z-blue);
+}
+
+.zBadge--rent {
+  background: rgba(22, 163, 74, 0.12);
+  border-color: rgba(22, 163, 74, 0.28);
+  color: rgba(22, 163, 74, 0.98);
+}
+
+.zBadge--type {
+  background: rgba(31, 41, 55, 0.06);
+}
+
+.zBadge--apartment {
+  border-color: rgba(124, 58, 237, 0.28);
+  color: rgba(124, 58, 237, 0.98);
+  background: rgba(124, 58, 237, 0.12);
+}
+
+.zBadge--house {
+  border-color: rgba(245, 158, 11, 0.3);
+  color: rgba(161, 98, 7, 0.98);
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.zBadge--terrain {
+  border-color: rgba(146, 64, 14, 0.3);
+  color: rgba(146, 64, 14, 0.98);
+  background: rgba(146, 64, 14, 0.12);
+}
+
+.zBadge--business {
+  border-color: rgba(15, 118, 110, 0.28);
+  color: rgba(15, 118, 110, 0.98);
+  background: rgba(15, 118, 110, 0.12);
+}
+
+.zDetails__priceRow {
+  display: grid;
+  gap: 8px;
+}
+
+.zDetails__price {
+  font-size: 1.6rem;
+  font-weight: 1000;
+  color: var(--z-text);
+  letter-spacing: -0.5px;
+}
+
+.zDetails__addr {
+  font-weight: 850;
+  color: rgba(31, 41, 55, 0.92);
+  line-height: 1.2;
+}
+
+.zDetails__loc {
+  margin-top: 4px;
+  color: var(--z-muted);
+  font-size: 0.92rem;
+  font-weight: 750;
+}
+
+.zDetails__facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.zStat {
+  border: 1px solid var(--z-border);
+  border-radius: 14px;
+  background: rgba(31, 41, 55, 0.03);
+  padding: 10px;
+}
+
+.zStat__value {
+  font-weight: 1000;
+  color: var(--z-text);
+  font-size: 1.05rem;
+}
+
+.zStat__label {
+  margin-top: 2px;
+  color: rgba(31, 41, 55, 0.6);
+  font-weight: 800;
+  font-size: 0.82rem;
+}
+
+.zDetails__ctaRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.zDetails__section {
+  margin-top: 6px;
+  border-top: 1px solid var(--z-border);
+  padding-top: 12px;
+}
+
+.zDetails__sectionTitle {
+  font-weight: 1000;
+  color: rgba(31, 41, 55, 0.92);
+}
+
+.zDetails__sectionBody {
+  margin-top: 8px;
+  color: rgba(31, 41, 55, 0.68);
+  font-weight: 650;
+  line-height: 1.35;
 }
 
 .zMap__wrap {
@@ -737,6 +1126,26 @@
   .zMapPane {
     border-right: none;
     border-bottom: 1px solid var(--z-border);
+  }
+
+  .zDetailsPane {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.35);
+    display: none;
+    padding: 10px;
+  }
+
+  .zDetailsPane .zDetails {
+    height: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.22);
+  }
+
+  .zDetailsPane--open {
+    display: block;
   }
 
   .zSearchRow {

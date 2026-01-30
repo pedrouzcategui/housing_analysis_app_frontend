@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, Marker, TileLayer, Tooltip, useMap } from "react-leaflet";
 import type { Listing } from "../data/listings";
 import { formatUsd } from "../lib/format";
+import { getListingMarkerIcon } from "../lib/leafletIcons";
 import { Skeleton } from "./Skeleton";
 
 const venezuelaCenter: [number, number] = [7.2, -66.3];
@@ -68,19 +69,46 @@ export function VenezuelaMap({
             <Marker
               key={l.id}
               position={[l.lat, l.lng]}
+              icon={getListingMarkerIcon(l, { selected: l.id === selectedId })}
               eventHandlers={{
                 click: () => onSelect(l.id),
               }}
             >
-              <Popup>
-                <div className="popup">
-                  <div className="popup__title">{l.title}</div>
-                  <div className="popup__meta">
-                    {l.city}, {l.state}
+              <Tooltip
+                className="zPinTooltip"
+                direction="top"
+                opacity={1}
+                offset={[0, -30]}
+                sticky
+              >
+                <div className="zHoverCard" role="group" aria-label="Listing preview">
+                  <div className="zHoverCard__imgWrap" aria-hidden="true">
+                    {l.imageUrl ? (
+                      <img
+                        className="zHoverCard__img"
+                        src={l.imageUrl}
+                        alt=""
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="zHoverCard__imgPlaceholder" />
+                    )}
                   </div>
-                  <div className="popup__meta">{formatUsd(l.priceUsd)}</div>
+
+                  <div className="zHoverCard__body">
+                    <div className="zHoverCard__price">
+                      {formatUsd(l.priceUsd)}
+                      <span className="zHoverCard__op">
+                        {l.operation === "rent" ? " / rent" : " / sale"}
+                      </span>
+                    </div>
+                    <div className="zHoverCard__title">{l.title}</div>
+                    <div className="zHoverCard__meta">
+                      {l.city}, {l.state}
+                    </div>
+                  </div>
                 </div>
-              </Popup>
+              </Tooltip>
             </Marker>
           ))}
 

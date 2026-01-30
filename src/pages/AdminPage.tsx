@@ -57,15 +57,13 @@ function downloadText(filename: string, text: string) {
 
 export function AdminPage() {
   const [processes, setProcesses] = useState<AdminProcess[]>(adminProcesses);
-  const [selectedId, setSelectedId] = useState(processes[0]?.id ?? "");
+  const [selectedId, setSelectedId] = useState(adminProcesses[0]?.id ?? "");
 
-  // Keep the selected id valid if the list changes.
-  useEffect(() => {
-    if (processes.length === 0) return;
-    setSelectedId((prev) =>
-      processes.some((p) => p.id === prev) ? prev : processes[0]!.id,
-    );
-  }, [processes]);
+  const effectiveSelectedId = useMemo(() => {
+    if (processes.length === 0) return "";
+    if (processes.some((p) => p.id === selectedId)) return selectedId;
+    return processes[0]!.id;
+  }, [processes, selectedId]);
 
   // Simulate a live headless browser: append logs + update current step.
   useEffect(() => {
@@ -119,8 +117,8 @@ export function AdminPage() {
   }, []);
 
   const selected = useMemo(() => {
-    return processes.find((p) => p.id === selectedId) ?? processes[0];
-  }, [processes, selectedId]);
+    return processes.find((p) => p.id === effectiveSelectedId) ?? processes[0];
+  }, [effectiveSelectedId, processes]);
 
   return (
     <div className="zApp">
@@ -260,7 +258,7 @@ export function AdminPage() {
 
             <div className="zAdminSideScroll">
               {processes.map((p) => {
-                const isSelected = p.id === selectedId;
+                const isSelected = p.id === effectiveSelectedId;
                 return (
                   <CardButton
                     key={p.id}
